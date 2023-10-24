@@ -1,4 +1,5 @@
-const fs = require('fs')
+import fs from 'fs'
+import excelToJson from './excelToJson.mjs'
 
 const directoryPath = 'source'
 
@@ -7,8 +8,6 @@ try {
 
   files.forEach((filename) => {
     if (filename.includes('各投開票所')) return
-
-    const { excelToJson } = require('./excelToJson.js')
 
     const result = excelToJson({
       path: `source/${filename}`,
