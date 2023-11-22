@@ -33,8 +33,10 @@ export function convertExcelToJson({ path, isVillage = false, year }) {
 
   let currentDistrict = null // 初始值設定為 null
 
-  const fields = [...myFields[year]]
-  isVillage ? fields.splice(1, 1) : fields
+  const fields = isVillage
+    ? myFields[year].withVillage
+    : myFields[year].noVillage
+
   const range = XLSX.utils.decode_range(worksheet['!ref'])
   const ignoreRows = isVillage ? 6 : 5
 
