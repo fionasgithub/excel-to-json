@@ -1,31 +1,53 @@
 import fs from 'fs'
 import _ from 'lodash'
+import XLSX from 'xlsx'
 
-const files = fs.readdirSync('output')
+const electionYears = ['2012', '2016', '2020']
 
-let list = {}
-files.forEach((name, i) => {
-  if (name === '全國.json') return
+for (const year of electionYears) {
+  generateAdministrativeArea(year)
+}
 
-  const json = fs.readFileSync(`output/${name}`, 'utf8')
-  const data = JSON.parse(json)
-  const city = name.substring(0, 3)
+export function generateAdministrativeArea(year) {
+  const directoryPath = `source/${year}`
+  const files = fs
+    .readdirSync(directoryPath)
+    .filter((filename) => filename.includes('A05-2'))
 
-  data
-    .filter((item) => item['行政區別'] !== '總計' || item['村里別'] !== '總計')
-    .reduce((res, item) => {
-      if (!item['村里別'] || item['村里別'] === '總計') return res
+  const jsonData = {}
 
-      res[city] ??= []
-      res[city].push(item['行政區別'])
-      res[city] = _.uniq(res[city])
-      // res[city][item['行政區別']].push(item['村里別'])
-      return res
-    }, list)
-})
+  files.forEach((filename) => {
+    const path = `${directoryPath}/${filename}`
+    const workbook = XLSX.readFile(path)
+    const sheetName = workbook.SheetNames[0] // 選擇第一個工作表
+    const worksheet = workbook.Sheets[sheetName]
+    const range = XLSX.utils.decode_range(worksheet['!ref'])
 
-fs.writeFileSync(
-  'administrative_area/administrative_area.json',
-  JSON.stringify(list),
-  'utf-8',
-)
+    const city = filename.substring(
+      filename.indexOf('(') + 1,
+      filename.indexOf(')'),
+    )
+    jsonData[city] ??= []
+
+    const ignoreRows = 5
+
+    for (let R = range.s.r; R <= range.e.r; R++) {
+      if (R < ignoreRows) continue // 前 5 行不處理
+
+      const districtAddress = { r: R, c: 0 }
+      const districtData = worksheet[XLSX.utils.encode_cell(districtAddress)]
+
+      const district = districtData.v.trim().replace(/\s/g, '')
+
+      if (district === '總計') continue
+
+      jsonData[city].push(district)
+    }
+
+    fs.writeFileSync(
+      `administrative_area/${year}.json`,
+      JSON.stringify(jsonData),
+      'utf-8',
+    )
+  })
+}

@@ -1,4 +1,8 @@
+import fs from 'fs'
 import XLSX from 'xlsx'
+
+const fieldsFile = fs.readFileSync('fields.json', 'utf-8')
+const myFields = JSON.parse(fieldsFile)
 
 const candidateMap = {
   蔡英文: '金色曠野同盟',
@@ -19,7 +23,7 @@ function formatValue(value) {
   return Number.isNaN(Number(str)) ? str : parseFloat(str)
 }
 
-export default function ({ path, isVillage = false }) {
+export function convertExcelToJson({ path, isVillage = false, year }) {
   const workbook = XLSX.readFile(path)
 
   const sheetName = workbook.SheetNames[0] // 選擇第一個工作表
@@ -29,37 +33,8 @@ export default function ({ path, isVillage = false }) {
 
   let currentDistrict = null // 初始值設定為 null
 
-  const fields = isVillage
-    ? [
-        '行政區別',
-        '村里別',
-        '宋楚瑜',
-        '韓國瑜',
-        '蔡英文',
-        '有效票數',
-        '無效票數',
-        '投票數',
-        '已領未投票數',
-        '發出票數',
-        '用餘票數',
-        '選舉人數',
-        '投票率',
-      ]
-    : [
-        '行政區別',
-        '宋楚瑜',
-        '韓國瑜',
-        '蔡英文',
-        '有效票數',
-        '無效票數',
-        '投票數',
-        '已領未投票數',
-        '發出票數',
-        '用餘票數',
-        '選舉人數',
-        '投票率',
-      ]
-
+  const fields = [...myFields[year]]
+  isVillage ? fields.splice(1, 1) : fields
   const range = XLSX.utils.decode_range(worksheet['!ref'])
   const ignoreRows = isVillage ? 6 : 5
 
@@ -94,4 +69,59 @@ export default function ({ path, isVillage = false }) {
     jsonData.push(temp)
   }
   return jsonData
+}
+
+export function storeValueToOutput(year) {
+  const directoryPath = `source/${year}`
+
+  const administrative_area = JSON.parse(
+    fs.readFileSync(`administrative_area/${year}.json`, 'utf-8'),
+  )
+
+  try {
+    const files = fs.readdirSync(directoryPath)
+
+    files.forEach((filename) => {
+      if (filename.includes('概況表')) return
+      if (filename.includes('4')) return
+
+      const isVillage = filename.includes('3')
+
+      const result = convertExcelToJson({
+        path: `${directoryPath}/${filename}`,
+        isVillage,
+        year,
+      })
+
+      if (result.length === 0) return
+
+      const cityname = filename
+        .substring(filename.indexOf('(') + 1, filename.indexOf(')'))
+        .replace(/\s/g, '')
+
+      if (isVillage) {
+        for (const city in administrative_area) {
+          for (const district of administrative_area[city]) {
+            const data = result.filter((row) => row['行政區別'] === district)
+            if (data.length === 0) continue
+
+            const jsonContent = JSON.stringify(data, null, 2)
+            fs.writeFileSync(
+              `output/${year}/${city}-${district}.json`,
+              jsonContent,
+            )
+            continue
+          }
+        }
+      } else {
+        const jsonContent = JSON.stringify(result, null, 2)
+        fs.writeFileSync(
+          `output/${year}/${cityname === '中央' ? '全國' : cityname}.json`,
+          jsonContent,
+        )
+      }
+    })
+  } catch (err) {
+    console.error('Error reading directory:', err)
+  }
 }

@@ -8,6 +8,7 @@
     "start": "node index.mjs",
     "candidate": "node candidate.mjs",
     "genSelector": "node administrative_area.mjs",
+    "comparison": "node administrative_area/comparison.mjs",
     "lint": "eslint . --fix --ignore-path .gitignore"
   },
   "author": "",
