@@ -6,11 +6,15 @@
   "main": "index.mjs",
   "scripts": {
     "start": "node index.mjs",
+    "candidate": "node candidate.mjs",
+    "genSelector": "node administrative_area.mjs",
     "lint": "eslint . --fix --ignore-path .gitignore"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "lodash": "^4.17.21",
+    "papaparse": "^5.4.1",
     "xlsx": "^0.18.5"
   },
   "engines": {
