@@ -1,0 +1,14 @@
+{
+  "plugins": [
+    "@semantic-release/commit-analyzer",
+    [
+      "semantic-release-jira-notes",
+      {
+        "jiraHost": "alohagroup.atlassian.net",
+        "ticketPrefixes": ["QS"]
+      }
+    ],
+    "@semantic-release/git",
+    "@semantic-release/github"
+  ]
+}
