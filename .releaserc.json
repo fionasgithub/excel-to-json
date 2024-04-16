@@ -21,7 +21,7 @@
       }
     ],
     [
-      "semantic-release-jira-notes",
+      "@semantic-release/release-notes-generator",
       {
         "jiraHost": "alohagroup.atlassian.net",
         "ticketPrefixes": ["QS"],
