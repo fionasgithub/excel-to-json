@@ -1,0 +1,87 @@
+{
+  "branches": ["master"],
+  "plugins": [
+    [
+      "@semantic-release/commit-analyzer",
+      {
+        "releaseRules": [
+          { "type": "feat", "release": "minor" },
+          { "type": "perf", "release": "minor" },
+          { "type": "build", "release": "patch" },
+          { "type": "fix", "release": "patch" },
+          { "type": "refactor", "release": "patch" },
+          { "type": "revert", "release": "patch" },
+          { "type": "chore", "release": false },
+          { "type": "ci", "release": false },
+          { "type": "docs", "release": false },
+          { "type": "style", "release": false },
+          { "type": "test", "release": false },
+          { "scope": "no-release", "release": false }
+        ]
+      }
+    ],
+    [
+      "semantic-release-jira-notes",
+      {
+        "jiraHost": "alohagroup.atlassian.net",
+        "ticketPrefixes": ["QS"],
+        "preset": "conventionalcommits",
+        "presetConfig": {
+          "types": [
+            {
+              "type": "feat",
+              "section": ":sparkles: Features",
+              "hidden": false
+            },
+            {
+              "type": "perf",
+              "section": ":zap: Performance Enhancement",
+              "hidden": false
+            },
+            {
+              "type": "build",
+              "section": ":building_construction: Build",
+              "hidden": false
+            },
+            { "type": "fix", "section": ":bug: Bug Fixes", "hidden": false },
+            {
+              "type": "refactor",
+              "section": ":recycle: Refactoring",
+              "hidden": false
+            },
+            {
+              "type": "revert",
+              "section": ":rewind: Reverts",
+              "hidden": false
+            },
+            {
+              "type": "chore",
+              "section": ":arrow_up: Updates",
+              "hidden": false
+            },
+            {
+              "type": "ci",
+              "section": ":repeat: Continuous Integration",
+              "hidden": false
+            },
+            {
+              "type": "docs",
+              "section": ":memo: Documentation",
+              "hidden": false
+            },
+            { "type": "style", "section": ":art: Styling", "hidden": false },
+            {
+              "type": "test",
+              "section": ":white_check_mark: Testing",
+              "hidden": false
+            }
+          ]
+        },
+        "parserOpts": {
+          "noteKeywords": ["BREAKING CHANGE", "BREAKING CHANGES", "BREAKING"]
+        }
+      }
+    ],
+    "@semantic-release/github"
+  ]
+}

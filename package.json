@@ -23,6 +23,7 @@
   },
   "packageManager": "npm@9.8.1",
   "devDependencies": {
+    "conventional-changelog-conventionalcommits": "~7.0.2",
     "eslint": "^8.52.0",
     "eslint-config-recommended": "^4.1.0",
     "eslint-plugin-import": "^2.29.0",
