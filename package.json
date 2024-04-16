@@ -1,7 +1,7 @@
 {
   "type": "module",
   "name": "excel-to-csv",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "",
   "main": "index.mjs",
   "scripts": {
