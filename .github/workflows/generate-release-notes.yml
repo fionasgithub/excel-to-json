@@ -25,5 +25,7 @@ jobs:
 
       - name: Generate Release Notes
         uses: cycjimmy/semantic-release-action@v4
+        with:
+          dry_run: true
         env:
           GITHUB_TOKEN: ${{ github.token }}
