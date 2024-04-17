@@ -23,8 +23,6 @@
     [
       "@semantic-release/release-notes-generator",
       {
-        "jiraHost": "alohagroup.atlassian.net",
-        "ticketPrefixes": ["QS"],
         "preset": "conventionalcommits",
         "presetConfig": {
           "types": [
@@ -78,7 +76,12 @@
           ]
         },
         "parserOpts": {
-          "noteKeywords": ["BREAKING CHANGE", "BREAKING CHANGES", "BREAKING"]
+          "noteKeywords": [
+            "BREAKING CHANGE",
+            "BREAKING CHANGES",
+            "BREAKING",
+            ":fire: HOTFIX"
+          ]
         }
       }
     ],
