@@ -1,5 +1,4 @@
 import fs from 'fs'
-import _ from 'lodash'
 import XLSX from 'xlsx'
 
 const electionYears = ['2012', '2016', '2020']
