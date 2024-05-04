@@ -1,12 +1,6 @@
 import fs from 'fs'
 import XLSX from 'xlsx'
 
-const electionYears = ['2012', '2016', '2020']
-
-for (const year of electionYears) {
-  generateAdministrativeArea(year)
-}
-
 export function generateAdministrativeArea(year) {
   const directoryPath = `source/${year}`
   const files = fs

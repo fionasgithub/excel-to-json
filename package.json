@@ -5,10 +5,7 @@
   "description": "",
   "main": "index.mjs",
   "scripts": {
-    "start": "node index.mjs",
-    "candidate": "node candidate.mjs",
-    "genSelector": "node administrative_area.mjs",
-    "comparison": "node administrative_area/comparison.mjs",
+    "start": "node -e 'import(\"./index.mjs\").then(loadedModule => loadedModule[process.env.FUNCTION_NAME]())'",
     "lint": "eslint . --fix --ignore-path .gitignore"
   },
   "author": "",
