@@ -23,6 +23,7 @@ export function findAreaDiff() {
   const files2016 = fs.readdirSync('output/2016')
   const files2020 = fs.readdirSync('output/2020')
 
-  const diff = _.difference(files2016, files2012)
+  const diff = _.difference(files2012, files2016)
   console.log(diff)
+  return diff
 }
